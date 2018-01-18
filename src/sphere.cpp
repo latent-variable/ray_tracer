@@ -1,16 +1,22 @@
 #include "sphere.h"
 #include "ray.h"
+#include <iostream> 
+#include <cmath>
+
+using namespace std;
 
 
 // Determine if the ray intersects with the sphere
 bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
 {
+   
    vec3 p = (ray.endpoint - center );
    
    double x = dot(ray.direction, p);
    double z = dot(p,p);
    
-   double delta = pow(2,(2 *x )) - 4*( z - pow(2,radius));
+   double delta = (4 *x*x ) - 4*( z - radius*radius);
+   
    
     if (delta <= 0 ) return false; 
   
@@ -20,6 +26,7 @@ bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
         Hit h1;
         h1.object = this; 
         h1.t = t1; 
+        
         h1.ray_exiting = false;
         hits.push_back(h1);
         

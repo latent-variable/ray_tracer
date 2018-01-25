@@ -1,5 +1,6 @@
 #include "plane.h"
 #include "ray.h"
+#include <iostream>
 #include <cfloat>
 
 
@@ -9,8 +10,37 @@
 bool Plane::
 Intersection(const Ray& ray, std::vector<Hit>& hits) const
 {
+    vec3 u = ray.direction;
+    vec3 e = ray.endpoint;
+    vec3 q = x1;
+    vec3 n = -normal;
+    
     // TODO
-    return false;
+    //vec3 p = (ray.endpoint - center );
+    Hit h;
+    h.object = this;
+    double l = dot(u, n);
+    double p = dot(n, (e - q));
+    
+    if(l == 0){
+        //std::cout<<"reached\n"<<std::endl;
+        if(p == 0){
+            h.t = 0;
+            h.ray_exiting = false;
+            hits.push_back(h);
+            return true;
+        }else{
+            return false;
+        }
+    }
+    double t = -p/l;
+    
+    h.t = t;
+    h.ray_exiting = false;
+    
+    hits.push_back(h);
+    
+    return true;
 }
 
 vec3 Plane::

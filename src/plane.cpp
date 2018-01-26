@@ -13,33 +13,35 @@ Intersection(const Ray& ray, std::vector<Hit>& hits) const
     vec3 u = ray.direction;
     vec3 e = ray.endpoint;
     vec3 q = x1;
-    vec3 n = -normal;
-    
+    vec3 n = normal;
+
     // TODO
     //vec3 p = (ray.endpoint - center );
     Hit h;
     h.object = this;
     double l = dot(u, n);
-    double p = dot(n, (e - q));
-    
-    if(l == 0){
+    double p = dot(n, (e-q));
+
+    if(l == 0)
+      return false;
+      /*
         //std::cout<<"reached\n"<<std::endl;
         if(p == 0){
             h.t = 0;
-            h.ray_exiting = false;
+            h.ray_exiting = l > 0;
             hits.push_back(h);
             return true;
         }else{
-            return false;
+
         }
-    }
+    }*/
     double t = -p/l;
-    
+
     h.t = t;
-    h.ray_exiting = false;
-    
+    h.ray_exiting = l > 0;
+
     hits.push_back(h);
-    
+
     return true;
 }
 

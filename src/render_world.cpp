@@ -31,9 +31,9 @@ Object* Render_World::Closest_Intersection(const Ray& ray,Hit& hit)
     // TODO
     double min_t = numeric_limits<double>::max();
     Object* closest_object = NULL;
-    
+
     for(unsigned i = 0; i < objects.size(); i++){
-        vector<Hit> hits; 
+        vector<Hit> hits;
         if (objects[i]->Intersection(ray, hits)){
             //objects[i]->Intersection(ray, hits);
             for(unsigned h = 0; h < hits.size(); h++){
@@ -45,7 +45,7 @@ Object* Render_World::Closest_Intersection(const Ray& ray,Hit& hit)
             }
         }
     }
-    
+    //cout <<"rw done \n"<< endl;
     return closest_object;
 }
 
@@ -53,16 +53,16 @@ Object* Render_World::Closest_Intersection(const Ray& ray,Hit& hit)
 void Render_World::Render_Pixel(const ivec2& pixel_index)
 {
     Ray ray; // TODO: set up the initial view ray here
-    
-    
+
+
     vec3 w = camera.World_Position(pixel_index);
-    
-   
+
+
     vec3 result = (w - camera.position).normalized();
-    
+
     ray.endpoint = camera.position;
     ray.direction = result;
-    
+
     vec3 color=Cast_Ray(ray,1);
     camera.Set_Pixel(pixel_index,Pixel_Color(color));
 }
@@ -79,17 +79,27 @@ void Render_World::Render()
 vec3 Render_World::Cast_Ray(const Ray& ray,int recursion_depth)
 {
     // TODO
+
     vec3 color;
     Hit hit;
     Object* obj = Closest_Intersection(ray, hit );
-    if(obj ){
-        vec3 dummy;
-        color = obj->material_shader->Shade_Surface(ray, dummy,dummy,1,false);
+
+    vec3 intersection = ray.Point(hit.t);
+
+
+    //cout << "cr done\n"<<endl;
+
+    if(obj){
+        //vec3 dummy;
+        vec3 normal = obj->Normal(intersection);
+        if(hit.ray_exiting) normal = -1.0*normal;
+        color = obj->material_shader->Shade_Surface(ray,intersection,normal,recursion_depth,hit.ray_exiting);
+        //color = obj->material_shader->Shade_Surface(ray,dummy,dummy,1,false);
     }else{
         vec3 dummy1;
         color = background_shader->Shade_Surface(ray,dummy1,dummy1,1,false);
+        //color = background_shader->Shade_Surface(ray,intersection,normal,recursion_depth,hit.ray_exiting);
     }
-    
 
     return color;
 }

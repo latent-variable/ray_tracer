@@ -68,7 +68,10 @@ int main(int argc, char** argv)
     Parse(world,width,height,input_file);
 
     // Render the image
+    //std::cout<< "in\n" <<std::endl;
     world.Render();
+    //std::cout<< "out\n" <<std::endl;
+
 
     // For debugging.  Render only the pixel specified on the commandline.
     // Useful for printing out information about a single pixel.

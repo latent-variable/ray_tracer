@@ -16,13 +16,8 @@ Shade_Surface(const Ray& ray,const vec3& intersection_point,
     vec3 I = intersection_point;
     vec3 N = same_side_normal;
 
-    vec3 Ambient;
-    vec3 Diffuse;
-    vec3 Specular;
+    vec3 Ambient, Diffuse, Specular;  //componets of Phong_Shader
 
-
-     // TODO: determine the color
-     // world.lights[i]->
      //Ambient Ia = Ra*La
      Ambient = world.ambient_color * world.ambient_intensity * color_ambient;
      color = Ambient;
@@ -37,7 +32,7 @@ Shade_Surface(const Ray& ray,const vec3& intersection_point,
            Hit hit;
            Ray ray2(I,L.normalized());
            Object *obj = world.Closest_Intersection(ray2,hit );
-
+           //check for shadows by looking for object from interscting to light position
            if(!obj){
                 goto COLOR;
             }else{
@@ -53,12 +48,12 @@ Shade_Surface(const Ray& ray,const vec3& intersection_point,
            //Light color square distance between the intersection point and the light source
            vec3 light_color = ((world.lights[i]->Emitted_Light(ray))/ d);
 
-           //Diffuse Id = Rd*Ld*max(0,light*normal)
+           //Diffuse Id = Rd*Ld*max(0,dot(light,normal))
            float cs = max( dot((L).normalized(),N), 0.0);
            //square distance between the intersection point and the light source
            Diffuse = color_diffuse  * cs * light_color;
 
-           //Specular
+           //Specular Is = Rs*Ls *max(0,dot(view,reflection))
            vec3 L_norm = L.normalized();
            vec3 R = ( 2.0* dot(L_norm,N)* N - L_norm);
            R = R.normalized();

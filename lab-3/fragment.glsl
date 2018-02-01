@@ -17,14 +17,14 @@ void main()
     eye = normalize(-pos);
 
     // compute ambient component and add to color
-    vec4 color_ambient = gl_LightSource[1].ambient* gl_FrontMaterial.ambient;
+    vec4 color_ambient = gl_LightSource[0].ambient* gl_FrontMaterial.ambient;
 
     // compute diffuse component and add to color
-    vec4 color_diffuse = gl_LightSource[1].diffuse* gl_FrontMaterial.diffuse * max(0.0, dot(n,l));
+    vec4 color_diffuse = gl_LightSource[0].diffuse* gl_FrontMaterial.diffuse * max(0.0, dot(n,l));
 
     // compute specular component and add to color
 
-    vec4 color_specular = gl_LightSource[1].specular* gl_FrontMaterial.specular * pow(max(0.0,dot(r,eye)),gl_FrontMaterial.shininess);
+    vec4 color_specular = gl_LightSource[0].specular* gl_FrontMaterial.specular * pow(max(0.0,dot(r,eye)),gl_FrontMaterial.shininess);
 
     vec4 color = color_ambient + color_diffuse + color_specular;
     gl_FragColor = color;

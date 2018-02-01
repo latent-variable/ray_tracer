@@ -89,7 +89,7 @@ vec3 Render_World::Cast_Ray(const Ray& ray,int recursion_depth)
 
     //cout << "cr done\n"<<endl;
 
-    if(obj){
+    if(obj && (recursion_depth <= recursion_depth_limit)){
         //vec3 dummy;
         vec3 normal = obj->Normal(intersection);
         if(hit.ray_exiting) normal = -1.0*normal;
